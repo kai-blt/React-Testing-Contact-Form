@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, getByRole } from "@testing-library/react";
 import App from "./App";
+import ContactForm from './components/ContactForm'
 import { act } from "react-dom/test-utils";
 
 describe('Form Field Testing', () => {
@@ -48,27 +49,34 @@ describe('Form Field Testing', () => {
     //It should be empty to start
     expect(message).not.toHaveValue()
     //Type into field
-    fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}})
-    ;
+    fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}});
     //Check that correct value was input
     expect(message).toHaveValue('this is a message');
   });
 
-
-  test('Validation appears when nothing filled out in any fields and submit pressed', () => {
-    render(<App />);
+  test('Filling out form completely and submitting results in json printout', () => {
+    render(<ContactForm />);
  
     const firstName = screen.getByLabelText(/First Name/i);
+    const lastName = screen.getByLabelText(/Last Name/i);
+    const email = screen.getByLabelText(/Email/i);
+    const message = screen.getByLabelText(/Message/i);
 
-    fireEvent.keyDown(firstName, 'Enter');  
+    fireEvent.change(firstName, {target: {name: 'firstName', value: 'Brendan'}})
+    fireEvent.change(lastName, {target: {name: 'lastName', value: 'LT'}})
+    fireEvent.change(email, {target: {name: 'email', value: 'email@email.com'}})
+    fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}})
 
-    screen.debug()
-    const errors = screen.getByText(/Looks like there was an error:/i)
+
+    const button = screen.getByTestId(/submit/i);
+ 
+    fireEvent.click(button) 
     
 
+    // screen.debug()
+    expect(screen.getByText(/{}/i))   
+
     // console.log(errorMessages)
-
-
   })
 
 })

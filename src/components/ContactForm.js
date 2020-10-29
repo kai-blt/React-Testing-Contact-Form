@@ -64,7 +64,7 @@ const ContactForm = () => {
           </pre>
         )}
         
-        <input type="submit" />
+        <input type="submit" data-testid='submit' />
       </form>
     </div>
   );
