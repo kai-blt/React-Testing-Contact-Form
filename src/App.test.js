@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, getByRole } from "@testing-library/react";
 import App from "./App";
+import { act } from "react-dom/test-utils";
 
 describe('Form Field Testing', () => {
 
@@ -15,8 +16,6 @@ describe('Form Field Testing', () => {
     expect(firstName).not.toHaveValue()
     //Type into field
     fireEvent.change(firstName, {target: {name: 'firstName', value: 'Brendan'}})
-    //Print out debug
-    screen.debug(firstName);
     //Check that correct value was input
     expect(firstName).toHaveValue('Brendan');
   });
@@ -28,34 +27,44 @@ describe('Form Field Testing', () => {
     expect(lastName).not.toHaveValue()
     //Type into field
     fireEvent.change(lastName, {target: {name: 'lastName', value: 'LT'}})
-    //Print out debug
-    screen.debug(lastName);
     //Check that correct value was input
     expect(lastName).toHaveValue('LT');
   });
 
   test('Email can be typed into', () => {
     render(<App/>);
-    const email = screen.getByPlaceholderText(/Burke/i);
+    const email = screen.getByLabelText(/Email/i);
     //It should be empty to start
     expect(email).not.toHaveValue()
     //Type into field
     fireEvent.change(email, {target: {name: 'email', value: 'email@email.com'}})
-    //Print out debug
-    screen.debug(email);
     //Check that correct value was input
     expect(email).toHaveValue('email@email.com');
   });
 
+  test('Message field can be typed into', () => {
+    render(<App/>);
+    const message = screen.getByLabelText(/Message/i);
+    //It should be empty to start
+    expect(message).not.toHaveValue()
+    //Type into field
+    fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}})
+    ;
+    //Check that correct value was input
+    expect(message).toHaveValue('this is a message');
+  });
+
+
   test('Validation appears when nothing filled out in any fields and submit pressed', () => {
     render(<App />);
-    
-    //Get Button
-    const button = screen.getByRole('input', {name: /submit/i});   
+ 
+    const firstName = screen.getByLabelText(/First Name/i);
 
-    fireEvent.click(button);
+    fireEvent.keyDown(firstName, 'Enter');  
+
+    screen.debug()
+    const errors = screen.getByText(/Looks like there was an error:/i)
     
-    const errorMessages = screen.getByDisplayValue(/Looks like there was an error: required/i)
 
     // console.log(errorMessages)
 

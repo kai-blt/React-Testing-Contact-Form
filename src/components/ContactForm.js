@@ -64,7 +64,7 @@ const ContactForm = () => {
           </pre>
         )}
         
-        <input type="submit" name="submit" />
+        <input type="submit" />
       </form>
     </div>
   );
