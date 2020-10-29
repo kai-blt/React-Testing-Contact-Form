@@ -1,19 +1,16 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, getByRole } from "@testing-library/react";
 import App from "./App";
 
 describe('Form Field Testing', () => {
 
-  test('First Name input exists', () => {
-    render(<App/>);
-    //Grab text input by placeholder
-    const firstName = screen.getAllByPlaceholderText(/Edd/i);
-    screen.debug(firstName)
-  });
+  test('Component Exists', () => {
+    render(<App/>)
+  })
 
   test('First Name can be typed into', () => {
     render(<App/>);
-    const firstName = screen.getByPlaceholderText(/Edd/i);
+    const firstName = screen.getByLabelText(/First Name/i);
     //It should be empty to start
     expect(firstName).not.toHaveValue()
     //Type into field
@@ -26,17 +23,43 @@ describe('Form Field Testing', () => {
 
   test('Last Name can be typed into', () => {
     render(<App/>);
-    const firstName = screen.getByPlaceholderText(/Burke/i);
+    const lastName = screen.getByLabelText(/Last Name/i);
     //It should be empty to start
-    expect(firstName).not.toHaveValue()
+    expect(lastName).not.toHaveValue()
     //Type into field
-    fireEvent.change(firstName, {target: {name: 'firstName', value: 'LT'}})
+    fireEvent.change(lastName, {target: {name: 'lastName', value: 'LT'}})
     //Print out debug
-    screen.debug(firstName);
+    screen.debug(lastName);
     //Check that correct value was input
-    expect(firstName).toHaveValue('LT');
+    expect(lastName).toHaveValue('LT');
   });
 
+  test('Email can be typed into', () => {
+    render(<App/>);
+    const email = screen.getByPlaceholderText(/Burke/i);
+    //It should be empty to start
+    expect(email).not.toHaveValue()
+    //Type into field
+    fireEvent.change(email, {target: {name: 'email', value: 'email@email.com'}})
+    //Print out debug
+    screen.debug(email);
+    //Check that correct value was input
+    expect(email).toHaveValue('email@email.com');
+  });
 
+  test('Validation appears when nothing filled out in any fields and submit pressed', () => {
+    render(<App />);
+    
+    //Get Button
+    const button = screen.getByRole('input', {name: /submit/i});   
+
+    fireEvent.click(button);
+    
+    const errorMessages = screen.getByDisplayValue(/Looks like there was an error: required/i)
+
+    // console.log(errorMessages)
+
+
+  })
 
 })
