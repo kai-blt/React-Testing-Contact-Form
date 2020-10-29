@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, getByRole } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import App from "./App";
 import ContactForm from './components/ContactForm'
 import { act } from "react-dom/test-utils";
@@ -54,29 +54,25 @@ describe('Form Field Testing', () => {
     expect(message).toHaveValue('this is a message');
   });
 
-  test('Filling out form completely and submitting results in json printout', () => {
-    render(<ContactForm />);
- 
-    const firstName = screen.getByLabelText(/First Name/i);
-    const lastName = screen.getByLabelText(/Last Name/i);
-    const email = screen.getByLabelText(/Email/i);
-    const message = screen.getByLabelText(/Message/i);
+  test('Filling out form completely and submitting results in json printout', async () => {
+    await act(async () => {
+      render(<App/>);
+      const firstName = screen.getByLabelText(/First Name/i);
+      const lastName = screen.getByLabelText(/Last Name/i);
+      const email = screen.getByLabelText(/Email/i);
+      const message = screen.getByLabelText(/Message/i);
 
-    fireEvent.change(firstName, {target: {name: 'firstName', value: 'Brendan'}})
-    fireEvent.change(lastName, {target: {name: 'lastName', value: 'LT'}})
-    fireEvent.change(email, {target: {name: 'email', value: 'email@email.com'}})
-    fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}})
+      fireEvent.change(firstName, {target: {name: 'firstName', value: 'Brendan'}})
+      fireEvent.change(lastName, {target: {name: 'lastName', value: 'LT'}})
+      fireEvent.change(email, {target: {name: 'email', value: 'email@email.com'}})
+      fireEvent.change(message, {target: {name: 'message', value: 'this is a message'}})
 
-
-    const button = screen.getByTestId(/submit/i);
- 
-    fireEvent.click(button) 
+      const button = screen.getByTestId(/submit/i);  
+      fireEvent.click(button);        
+    });
     
-
-    // screen.debug()
-    expect(screen.getByText(/{}/i))   
-
-    // console.log(errorMessages)
+    const errors = screen.getByText(/{}/i);
+    expect(errors).toHaveValue(/{}/i);
   })
 
 })
