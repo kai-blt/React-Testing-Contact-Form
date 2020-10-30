@@ -72,7 +72,7 @@ describe('Form Field Testing', () => {
     fireEvent.click(button);      
     
     await waitFor(() => {
-      expect(screen.getByText(/Bre/i)).toBeInTheDocument();
+      expect(screen.getByText(/"firstName":/i)).toBeInTheDocument();
     });
   })
 
