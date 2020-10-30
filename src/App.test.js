@@ -76,4 +76,15 @@ describe('Form Field Testing', () => {
     });
   })
 
+  test('Submitting empty form results in error messages', async () => {
+    render(<App/>);
+
+    const button = screen.getByTestId(/submit/i);  
+    fireEvent.click(button);      
+    
+    await waitFor(() => {
+      expect(screen.getAllByText(/Looks like there was an error: required/i));
+    });
+  })  
+
 })
